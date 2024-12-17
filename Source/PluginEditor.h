@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "Oscillator.h"
+#include "NoiseOscillator.h"
 #include "Envelope.h"
 #include "Filter.h"
 
@@ -30,9 +31,10 @@ public:
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    AASineAudioProcessor& audioProcessor;
+    AASineAudioProcessor& processor;
 
     Oscillator oscGui;
+    NoiseOscillator noiseGui;
     Envelope envGui;
     Filter filterGui;
 

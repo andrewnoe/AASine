@@ -14,15 +14,8 @@
 //==============================================================================
 Oscillator::Oscillator(AASineAudioProcessor& p) : processor(p)
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
 
-}
-
-Oscillator::~Oscillator()
-{
-
-    setSize(200, 200);
+    /*setSize(200, 200);
 
     oscMenu.addItem("Sine", 1);
     oscMenu.addItem("Saw", 2);
@@ -32,32 +25,30 @@ Oscillator::~Oscillator()
     addAndMakeVisible(&oscMenu);
 
 
-    waveSelection = new juce::AudioProcessorValueTreeState::ComboBoxAttachment(processor.tree, "wavetype", oscMenu);
+    waveSelection = new juce::AudioProcessorValueTreeState::ComboBoxAttachment(processor.tree, "wavetype", oscMenu);*/
 
-    
+}
 
+Oscillator::~Oscillator()
+{   
 }
 
 void Oscillator::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
     
+    /*juce::Rectangle<int> titleArea(0, 10, getWidth(), 20);
+    
+    g.fillAll (juce::Colours::black);
+    g.setColour(juce::Colours::white);
+    g.drawText("Oscillator One", titleArea, juce::Justification::centredTop);
+    
+    
+    juce::Rectangle <float> area (25, 25, 150, 150);
+    
+    g.setColour(juce::Colours::beige);
+    g.drawRoundedRectangle(area, 20.0f, 2.0f);*/
 
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
-
-    g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
-
-    g.setColour (juce::Colours::white);
-    g.setFont (juce::FontOptions (14.0f));
-    g.drawText ("Oscillator", getLocalBounds(),
-                juce::Justification::centred, true);   // draw some placeholder text
-
-    */
+    
 
 }
 
@@ -66,13 +57,10 @@ void Oscillator::resized()
     // This method is where you should set the bounds of any child
     // components that your component contains..
 
-    juce::Rectangle<int> area = getLocalBounds().reduced(40);
+    /*juce::Rectangle<int> area = getLocalBounds().reduced(40);
 
-    oscMenu.setBounds(area.removeFromTop(20));
+    oscMenu.setBounds(area.removeFromTop(20));*/
 
-
-}
-
-void Oscillator::comboBoxChanged(juce::ComboBox* box) {
 
 }
+

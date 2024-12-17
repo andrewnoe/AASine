@@ -20,13 +20,13 @@ Envelope::Envelope(AASineAudioProcessor& p) : processor(p)
 
     //slider initialization values
     attackSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    attackSlider.setRange(0.1f, 10000.0f);
+    attackSlider.setRange(0.1f, 5000.0f);
     attackSlider.setValue(0.1f);
     attackSlider.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
     addAndMakeVisible(&attackSlider);
 
     decaySlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    decaySlider.setRange(1.0f, 10000.0f);
+    decaySlider.setRange(1.0f, 2000.0f);
     decaySlider.setValue(1.0f);
     decaySlider.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
     addAndMakeVisible(&decaySlider);
@@ -38,7 +38,7 @@ Envelope::Envelope(AASineAudioProcessor& p) : processor(p)
     addAndMakeVisible(&sustainSlider);
 
     releaseSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    releaseSlider.setRange(0.1f, 10000.0f);
+    releaseSlider.setRange(0.1f, 5000.0f);
     releaseSlider.setValue(0.8f);
     releaseSlider.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
     addAndMakeVisible(&releaseSlider);

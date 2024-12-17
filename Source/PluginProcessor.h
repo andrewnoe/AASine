@@ -20,7 +20,7 @@ class AASineAudioProcessor : public juce::AudioProcessor
 public:
     //==============================================================================
     AASineAudioProcessor();
-    ~AASineAudioProcessor() override;
+    ~AASineAudioProcessor();
 
     //==============================================================================
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
@@ -55,6 +55,8 @@ public:
     void getStateInformation(juce::MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
 
+    void updateFilter();
+
     juce::AudioProcessorValueTreeState tree;
 
 
@@ -62,6 +64,9 @@ private:
     //==============================================================================
     juce::Synthesiser mySynth;
     SynthVoice* myVoice;
+
+    juce::dsp::ProcessorDuplicator<juce::dsp::StateVariableFilter::Filter<float>, juce::dsp::StateVariableFilter::Parameters<float>> stateVariableFilter;
+
     double lastSampleRate;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AASineAudioProcessor)

@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    Oscillator.h
-    Author:  Andrew Noe
+    NoiseOscillator.h
+    Author:  Andrew
 
   ==============================================================================
 */
@@ -15,24 +15,22 @@
 //==============================================================================
 /*
 */
-class Oscillator  : public juce::Component
-
+class NoiseOscillator  : public juce::Component
 {
 public:
-    Oscillator(AASineAudioProcessor&);
-    ~Oscillator();
+    NoiseOscillator(AASineAudioProcessor&);
+    ~NoiseOscillator();
 
     void paint (juce::Graphics&) override;
     void resized() override;
 
-
 private:
 
-    juce::ComboBox oscMenu;
+    juce::Slider Blendslider;
 
-    juce::ScopedPointer<juce::AudioProcessorValueTreeState::ComboBoxAttachment> waveSelection;
+    juce::ScopedPointer<juce::AudioProcessorValueTreeState::SliderAttachment> blendVal;
 
     AASineAudioProcessor& processor;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Oscillator)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NoiseOscillator)
 };

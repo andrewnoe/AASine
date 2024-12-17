@@ -29,6 +29,7 @@ tree(*this, nullptr, "PARAMETERS",
         std::make_unique<juce::AudioParameterFloat>("filterType", "FilterType", juce::NormalisableRange<float>(0.0f, 2.0f), 0.0f),
         std::make_unique<juce::AudioParameterFloat>("filterCutoff", "FilterCutoff", juce::NormalisableRange<float>(20.0f, 10000.0f), 400.0f),
         std::make_unique<juce::AudioParameterFloat>("filterRes", "FilterRes", juce::NormalisableRange<float>(1.0f, 5.0f), 1.0f),
+        std::make_unique<juce::AudioParameterFloat>("blend","Blend", juce::NormalisableRange<float>(0.0f, 1.0f), 0.6f),
     })
 #endif
 {
@@ -119,6 +120,15 @@ void AASineAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
     lastSampleRate = sampleRate;
     mySynth.setCurrentPlaybackSampleRate(lastSampleRate);
 
+    juce::dsp::ProcessSpec spec;
+    spec.sampleRate = lastSampleRate;
+    spec.maximumBlockSize = samplesPerBlock;
+    spec.numChannels = getTotalNumOutputChannels();
+
+    stateVariableFilter.reset();
+    stateVariableFilter.prepare(spec);
+    updateFilter();
+
 
 }
 
@@ -151,6 +161,31 @@ bool AASineAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) co
 }
 #endif
 
+void AASineAudioProcessor::updateFilter()
+{
+    int menuChoice = *tree.getRawParameterValue("filterType");
+    int freq = *tree.getRawParameterValue("filterCutoff");
+    int res = *tree.getRawParameterValue("filterRes");
+
+    if (menuChoice == 0)
+    {
+        stateVariableFilter.state->type = juce::dsp::StateVariableFilter::Parameters<float>::Type::lowPass;
+        stateVariableFilter.state->setCutOffFrequency(lastSampleRate, freq, res);
+    }
+
+    if (menuChoice == 1)
+    {
+        stateVariableFilter.state->type = juce::dsp::StateVariableFilter::Parameters<float>::Type::highPass;
+        stateVariableFilter.state->setCutOffFrequency(lastSampleRate, freq, res);
+    }
+
+    if (menuChoice == 2)
+    {
+        stateVariableFilter.state->type = juce::dsp::StateVariableFilter::Parameters<float>::Type::bandPass;
+        stateVariableFilter.state->setCutOffFrequency(lastSampleRate, freq, res);
+    }
+}
+
 void AASineAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
 
@@ -170,12 +205,17 @@ void AASineAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::
             myVoice->getFilterParams((float*)tree.getRawParameterValue("filterType"),
                                      (float*)tree.getRawParameterValue("filterCutoff"),
                                      (float*)tree.getRawParameterValue("filterRes"));
+            myVoice->getExtraParams((float*)tree.getRawParameterValue("blend"));
+
         }
 
     }
 
     buffer.clear();
     mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    updateFilter();
+    juce::dsp::AudioBlock<float> block(buffer);
+    stateVariableFilter.process(juce::dsp::ProcessContextReplacing<float>(block));
 
 }
 

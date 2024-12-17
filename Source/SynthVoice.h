@@ -24,6 +24,12 @@ public:
 
     }
 
+    static double noteHz(int midiNoteNumber, double centsOffset)
+    {
+        double hertz = juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber);
+        hertz *= std::pow(2.0, centsOffset / 1200);
+        return hertz;
+    }
     
     //Oscillator creation
     void getOscType(float* selection) {
@@ -31,12 +37,23 @@ public:
     }
 
     double setOscType() {
+
+        double sample1, sample2;
+
         if (waveShape == 0) {
-            return osc1.sinewave(frequency);
+            sample1 =  osc1.sinewave(frequency);
         }
         else {
-            return osc1.sinewave(frequency);
+            sample1 =  osc1.sinewave(frequency);
         }
+
+        //float r = random.nextFloat() / (float)RAND_MAX;
+        //float noiseSample = r * 2 - 1;
+
+        float noiseSample = random.nextFloat() * 0.25f - 0.125f;
+
+        return sample1 + noiseOscBlend * noiseSample;
+
     }
 
     //Envelope
@@ -51,6 +68,10 @@ public:
         return env1.adsr(setOscType(), env1.trigger) ;
     }
 
+    void getExtraParams(float* blend) {
+        noiseOscBlend = *blend;
+    }
+
     //Filter
     void getFilterParams(float* type, float* filterCutoff, float* filterRes) {
         filterType = *type;
@@ -58,7 +79,7 @@ public:
         resonance = *filterRes;
     }
 
-    double setFilter() {
+    /*double setFilter() {
         if (filterType == 0) {
             return filter1.lores(setEnvelope(), cutoff, resonance);
         }
@@ -71,10 +92,11 @@ public:
         else {
             return filter1.lores(setEnvelope(), cutoff, resonance);
         }
-    }
+    }*/
 
     void startNote(int midiNoteNumber, float velocity, juce::SynthesiserSound* sound, int currentPitchWheelPosition) {
 
+        noteNumber = midiNoteNumber;
         env1.trigger = 1;
         //converts midi note to correct synth frequency
         frequency = juce::MidiMessage::getMidiNoteInHertz(midiNoteNumber);
@@ -109,28 +131,34 @@ public:
 
             for (int channel = 0; channel < outputBuffer.getNumChannels(); channel++) {
 
-                outputBuffer.addSample(channel, startSample, setFilter() *0.3f);
+                outputBuffer.addSample(channel, startSample, setEnvelope() *0.3f);
 
             }
 
-            startSample++;
+            ++startSample;
 
         }
 
     }
 
 private:
+    juce::Random random;
     double level;
     double frequency;
     int waveShape;
+
+    float noiseOscBlend;
+    int noteNumber;
 
     int filterType;
     float cutoff;
     float resonance;
 
+    float noiseOsc;
+
     maxiOsc osc1;
     maxiEnv env1;
-    maxiFilter filter1;
+    // maxiFilter filter1;
 
 };
 

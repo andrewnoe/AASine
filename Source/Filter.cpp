@@ -49,14 +49,20 @@ Filter::~Filter()
 void Filter::paint (juce::Graphics& g)
 {
     juce::Rectangle<int> titleArea(0, 10, getWidth(), 20);
+    juce::Rectangle<int> knobOne(54, 75, getWidth(), 20);
+    juce::Rectangle<int> knobTwo(34, 75, getWidth(), 20);
 
     g.fillAll (juce::Colours::black); 
     g.setColour(juce::Colours::white);
     g.drawText("Filter", titleArea, juce::Justification::centredTop);
 
+
     juce::Rectangle<float> area(25, 25, 150, 150);
     g.setColour(juce::Colours::beige);
     g.drawRoundedRectangle(area, 20.0f, 2.0f);
+
+    g.drawText("Freq", knobOne, juce::Justification::centredLeft);
+    g.drawText("Res", knobTwo, juce::Justification::centred);
     
 }
 

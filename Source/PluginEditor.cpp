@@ -11,13 +11,14 @@
 
 //==============================================================================
 AASineAudioProcessorEditor::AASineAudioProcessorEditor(AASineAudioProcessor& p)
-    : AudioProcessorEditor(&p), audioProcessor(p), oscGui(p), envGui(p), filterGui(p)
+    : AudioProcessorEditor(&p), processor(p), oscGui(p), noiseGui(p), envGui(p), filterGui(p)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize(600, 200);
 
-    addAndMakeVisible(&oscGui);
+    //addAndMakeVisible(&oscGui);
+    addAndMakeVisible(&noiseGui);
     addAndMakeVisible(&envGui);
     addAndMakeVisible(&filterGui);
 
@@ -31,11 +32,7 @@ AASineAudioProcessorEditor::~AASineAudioProcessorEditor()
 void AASineAudioProcessorEditor::paint(juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
-
-    g.setColour(juce::Colours::white);
-    g.setFont(juce::FontOptions(15.0f));
-    g.drawFittedText("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
+    g.fillAll(juce::Colours::black);
 }
 
 void AASineAudioProcessorEditor::resized()
