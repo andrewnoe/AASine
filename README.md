@@ -1,6 +1,7 @@
 ## AASine
 
-![AASine](https://github.com/user-attachments/assets/a52c4c62-7baf-4c9b-b97c-5d01fa4c5696)
+![AASine](https://github.com/user-attachments/assets/785c8b95-d524-4770-b2b5-37a89cdf471a)
+
 
 This is a VST made with C++, JUCE, and the Maximillian library.
 
